@@ -2,8 +2,9 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const DbDriver = require("./db-driver");
-
+const path = require("path");
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,8 +18,12 @@ const getHostLink = (req, _port) => {
 };
 
 app.get("/admin", (req, res) => {
-  res.send("Hello, World!");
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
 });
+app.get("/",(req,res)=>{
+    res.status(401).send("Opps!")
+})
+app.use(express.static(path.join(__dirname, "..", "build")));
 
 app.get("/generate-url", (req, res) => {
   let name = req.query.name;
@@ -33,10 +38,10 @@ app.get("/generate-url", (req, res) => {
   res.json({ url: uniqueUrl });
 });
 
-app.get("/url-list",(req,res)=>{
-    let keys = db.keys(getHostLink(req, port)+"/")
-    res.json({ data:keys });
-})
+app.get("/url-list", (req, res) => {
+  let keys = db.keys(getHostLink(req, port) + "/");
+  res.json({ data: keys });
+});
 
 app.post("/:api_key", (req, res) => {
   const api_key = req.params.api_key;

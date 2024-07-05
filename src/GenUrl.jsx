@@ -1,12 +1,13 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios";
-const api = "http://localhost:8080";
+const api = "";
 function GenUrl() {
   const [urls, setUrls] = useState({});
   const [name, setName] = useState("");
   console.log(urls);
   const urlHandler = async () => {
     const res = await axios.get(api + "/generate-url?name=" + name);
+    setName("")
     setUrls((pv) => ({
       ...pv,
       [res.data["url"]]: name,
