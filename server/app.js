@@ -6,10 +6,10 @@ const path = require("path");
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.text(),express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const port = 8080;
+const port = 80;
 
 const db = new DbDriver("db.json");
 
